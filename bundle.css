@@ -1,0 +1,55 @@
+
+body {
+    max-width: 600px;
+    margin: 32px auto 32px auto;
+    padding: 5px;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+}
+
+.header {
+    text-align: center;
+    font-size: xxx-large;
+}
+
+.header>span>a {
+    text-decoration: none;
+    color: black;
+}
+
+p, h1, h2, h3, h4, a, span, .jumbo-title {
+  font-family: "IBM Plex Serif", serif;
+  font-optical-sizing: auto;
+}
+
+p {
+    line-height: 1.5;
+}
+
+.jumbo-title {
+    font-size: 4.0vw;
+    font-weight: 700;
+    text-align: center;
+}
+
+.jumbo-subtitle {
+    font-size: 2.1vw;
+    font-weight: 500;
+    text-align: center;
+}
+
+.big-center {
+    width: 100%;
+    height: 100px;
+    
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    
+    margin: auto;
+}
