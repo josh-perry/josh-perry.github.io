@@ -1,0 +1,306 @@
+---
+title: duck
+layout: layouts/empty.njk
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>quack</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        canvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    canvas {
+        display: block;
+        width: 100vw;
+        height: 100vh;
+    }
+</style>
+
+<canvas id="duckCanvas"></canvas>
+
+<script type="text/javascript">
+const canvas = document.getElementById('duckCanvas');
+const ctx = canvas.getContext('2d');
+
+const duck = {
+    x: canvas.width / 2,
+    y: canvas.height / 2,
+    width: 100,
+    height: 100,
+    scale: 1,
+    targetScale: 1,
+    scaleDamping: 0.15,
+
+    listening: false,
+    talkingBack: false,
+    talkingDuration: 0,
+    bounceTimer: 0,
+};
+
+const MIN_LISTEN_TIME = 2000;
+const IGNORE_AFTER_BOUNCE = 2000;
+const COOLDOWN_AFTER_PEAK = 2000;
+let ignoreUntil = 0;
+let lastPeakTime = 0;
+
+const TALK_THRESHOLD = 0.5;
+const BOUNCE_RATIO = 0.7;
+let talkingStart = null;
+
+const SCALE_OSCILLATION = 0.5;
+
+let audioContext;
+let analyser;
+let microphone;
+let dataArray;
+let isAudioInitialized = false;
+let previousVolume = 0;
+let volumeHistory = [];
+const volumeHistoryLength = 5;
+
+const duckImage = new Image();
+duckImage.src = '/assets/duck/duck.png';
+const duckImage2 = new Image();
+duckImage2.src = '/assets/duck/duck2.png';
+
+const DUCK2_DURATION = 200;
+let showDuck2Until = 0;
+let currentDuckImage = duckImage;
+
+const quackAudio = new Audio('/assets/duck/quack.mp3');
+
+async function initAudio() {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = audioContext.createAnalyser();
+        microphone = audioContext.createMediaStreamSource(stream);
+        
+        analyser.fftSize = 256;
+        const bufferLength = analyser.frequencyBinCount;
+        dataArray = new Uint8Array(bufferLength);
+        
+        microphone.connect(analyser);
+        isAudioInitialized = true;
+    } catch (err) {
+        console.error('Error accessing microphone:', err);
+    }
+}
+
+function quack() {
+    quackAudio.currentTime = 0;
+    quackAudio.play();
+    currentDuckImage = duckImage2;
+    showDuck2Until = performance.now() + DUCK2_DURATION;
+}
+
+function getVolumeLevel() {
+    if (!isAudioInitialized || !analyser) {
+        return 0;
+    }
+    
+    analyser.getByteFrequencyData(dataArray);
+    
+    let sum = 0;
+    for (let i = 0; i < dataArray.length; i++) {
+        sum += dataArray[i];
+    }
+    
+    const average = sum / dataArray.length;
+
+    // normalise
+    return Math.min(average / 128, 1);
+}
+
+function detectVolumeSpike(currentVolume) {
+    volumeHistory.push(currentVolume);
+    if (volumeHistory.length > volumeHistoryLength) {
+        volumeHistory.shift();
+    }
+    
+    const avgRecentVolume = volumeHistory.reduce((sum, vol) => sum + vol, 0) / volumeHistory.length;
+    
+    const volumeIncrease = currentVolume - previousVolume;
+    const isSpike = volumeIncrease > duck.bounceThreshold && currentVolume > 0.1;
+    
+    previousVolume = currentVolume;
+    return { isSpike, intensity: Math.min(volumeIncrease * 5, 1), currentVolume, avgRecentVolume };
+}
+
+let previousTimestamp = null;
+
+function animate(timestamp) {
+    if (!previousTimestamp) previousTimestamp = timestamp;
+    const dt = (timestamp - previousTimestamp) / 1000;
+    previousTimestamp = timestamp;
+
+    duck.y = canvas.height / 2 + Math.sin((timestamp / 1000) / 2) * 20;
+    duck.x = canvas.width / 2 + Math.cos((timestamp / 1000) / 5) * 120;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const volume = getVolumeLevel();
+    const { isSpike, intensity, currentVolume, avgRecentVolume } = detectVolumeSpike(volume);
+
+    const now = performance.now();
+
+    if (currentVolume > TALK_THRESHOLD) {
+        lastPeakTime = now;
+    }
+
+    // this got a bit messy but i don't care
+    if (now < ignoreUntil) {
+        duck.listening = false;
+        duck.talkingDuration = 0;
+        talkingStart = null;
+    } else if (currentVolume > TALK_THRESHOLD) {
+        if (!duck.listening) {
+            duck.listening = true;
+            talkingStart = now;
+        }
+
+        if (duck.listening && talkingStart) {
+            duck.talkingDuration = now - talkingStart;
+        }
+
+        duck.talkingBack = false;
+        duck.bounceTimer = 0;
+    } else {
+        if (duck.listening && (now - lastPeakTime) >= COOLDOWN_AFTER_PEAK) {
+            if (duck.talkingDuration >= MIN_LISTEN_TIME) {
+                duck.listening = false;
+                duck.talkingBack = true;
+
+                duck.bounceTimer = duck.talkingDuration * BOUNCE_RATIO;
+                duck.talkingDuration = 0;
+                talkingStart = null;
+
+                duck.currentY = duck.baseY;
+                duck.velocityY = -duck.bounceHeight;
+
+                quack();
+            } else {
+                duck.listening = false;
+                duck.talkingDuration = 0;
+                talkingStart = null;
+            }
+        } else if (duck.listening) {
+            if (duck.listening && talkingStart) {
+                duck.talkingDuration = now - talkingStart;
+            }
+        }
+    }
+
+    if (duck.talkingBack && duck.bounceTimer > 0) {
+        duck.targetScale = 1 + (Math.sin(now) * 0.5);
+
+        if (Math.abs(duck.targetScale - 1) < 0.01) {
+            quack();
+        }
+
+        duck.bounceTimer -= dt * 1000;
+        if (duck.bounceTimer <= 0) {
+            duck.talkingBack = false;
+            duck.targetScale = 1;
+            ignoreUntil = performance.now() + IGNORE_AFTER_BOUNCE;
+        }
+    } else if (!duck.talkingBack) {
+        if (isSpike) {
+            duck.targetScale = 1 + intensity * 0.7;
+        }
+        duck.scale += (duck.targetScale - duck.scale) * duck.scaleDamping;
+        if (Math.abs(duck.targetScale - duck.scale) < 0.01) {
+            duck.scale = 1;
+            duck.targetScale = 1;
+        }
+    }
+    duck.scale += (duck.targetScale - duck.scale) * duck.scaleDamping;
+
+    if (showDuck2Until && performance.now() > showDuck2Until) {
+        currentDuckImage = duckImage;
+        showDuck2Until = 0;
+    }
+
+    ctx.save();
+    ctx.translate(duck.x, duck.y);
+    ctx.scale(duck.scale, duck.scale);
+    if (currentDuckImage.complete) {
+        ctx.drawImage(
+            currentDuckImage,
+            -duck.width / 2,
+            -duck.height / 2,
+            duck.width,
+            duck.height
+        );
+    }
+    ctx.restore();
+
+    requestAnimationFrame(animate);
+}
+
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    duck.x = canvas.width / 2;
+    duck.y = canvas.height / 2;
+}
+
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+duckImage.onload = function() {
+    initAudio().then(() => {
+        requestAnimationFrame(animate);
+    });
+};
+
+duckImage.onerror = function() {
+    initAudio().then(() => {
+        requestAnimationFrame(animate);
+    });
+};
+
+canvas.addEventListener('click', () => {
+    if (audioContext && audioContext.state === 'suspended') {
+        audioContext.resume();
+    }
+    if (!isAudioInitialized) {
+        initAudio();
+    }
+});
+</script>
+</body>
+</html>

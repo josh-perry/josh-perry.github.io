@@ -1,0 +1,18 @@
+---
+layout: layouts/main.njk
+tags: post
+date: Created
+---
+
+<div class="post-title">{{ title }}</div>
+<div class="date">{{ page.date | dateDisplay }}</div>
+
+<div class="tag-list">
+{% for tag in tags %}
+  {% if tag != "post" %}
+  <div class="tag">#{{ tag }}</div>
+  {% endif %}
+{% endfor %}
+</div>
+
+{{ content | safe }}
