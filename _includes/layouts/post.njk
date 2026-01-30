@@ -4,15 +4,14 @@ tags: post
 date: Created
 ---
 
-<div class="post-title">{{ title }}</div>
-<div class="date">{{ page.date | dateDisplay }}</div>
+<article>
+  <div class="post-title">{{ title }}</div>
+  <div class="post-subtitle">{{ subtitle }}</div>
+  <div class="date">{{ page.date | dateDisplay }}</div>
 
-<div class="tag-list">
-{% for tag in tags %}
-  {% if tag != "post" %}
-  <div class="tag">#{{ tag }}</div>
-  {% endif %}
-{% endfor %}
-</div>
+  {{ content | safe }}
+</article>
 
-{{ content | safe }}
+<footer>
+  <a href="#">Back to top</a>
+</footer>
