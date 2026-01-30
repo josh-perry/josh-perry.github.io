@@ -108,7 +108,7 @@ I know this puts the list out of order but that's fine by me :)
 
 ---
 
-**10. York** - Australia, Western Australia ([-31.8889034,116.7691483](https://www.google.com/maps?q=-31.8889034,116.7691483))
+**9ish. York** - Australia, Western Australia ([-31.8889034,116.7691483](https://www.google.com/maps?q=-31.8889034,116.7691483))
 
 **Named/founded**: 1835
 
@@ -116,7 +116,7 @@ I know this puts the list out of order but that's fine by me :)
 
 ---
 
-**11. York** - US, Alabama ([32.4862491,-88.2964183](https://www.google.com/maps?q=32.4862491,-88.2964183))
+**10. York** - US, Alabama ([32.4862491,-88.2964183](https://www.google.com/maps?q=32.4862491,-88.2964183))
 
 **Named/founded**: 1838
 
@@ -124,7 +124,7 @@ I know this puts the list out of order but that's fine by me :)
 
 ---
 
-**9. York Township** - US, Illinois, DuPage County ([41.860556, -87.975556](https://www.google.com/maps?ll=41.860556,-87.975556&q=41.860556,-87.975556&hl=en&t=m&z=12))
+**11. York Township** - US, Illinois, DuPage County ([41.860556, -87.975556](https://www.google.com/maps?ll=41.860556,-87.975556&q=41.860556,-87.975556&hl=en&t=m&z=12))
 
 **Named/founded**: 1849
 
@@ -132,7 +132,7 @@ I know this puts the list out of order but that's fine by me :)
 
 ---
 
-**10. York Township** - US, Illinois, Carroll County ([41.964722, -90.0625](https://www.google.com/maps?ll=41.964722,-90.0625&q=41.964722,-90.0625&hl=en&t=m&z=12))
+**12. York Township** - US, Illinois, Carroll County ([41.964722, -90.0625](https://www.google.com/maps?ll=41.964722,-90.0625&q=41.964722,-90.0625&hl=en&t=m&z=12))
 
 **Named/founded**: 1850
 
@@ -140,7 +140,7 @@ I know this puts the list out of order but that's fine by me :)
 
 ---
 
-**11. York Township** - US, Illinois, Clark County ([39.220833, -87.636944](https://www.google.com/maps?ll=39.220833,-87.636944&q=39.220833,-87.636944&hl=en&t=m&z=12))
+**13. York Township** - US, Illinois, Clark County ([39.220833, -87.636944](https://www.google.com/maps?ll=39.220833,-87.636944&q=39.220833,-87.636944&hl=en&t=m&z=12))
 
 **Named/founded**: 1854
 
@@ -148,7 +148,7 @@ I know this puts the list out of order but that's fine by me :)
 
 ---
 
-**12. York** - US, Minnesota ([43.532601,-92.2690996](https://www.google.com/maps?q=43.532601,-92.2690996))
+**14. York** - US, Minnesota ([43.532601,-92.2690996](https://www.google.com/maps?q=43.532601,-92.2690996))
 
 **Named/founded**: 1858
 
@@ -156,7 +156,7 @@ I know this puts the list out of order but that's fine by me :)
 
 ---
 
-**13. York** - US, Nebraska ([40.8680593,-97.5919166](https://www.google.com/maps?q=40.8680593,-97.5919166))
+**15. York** - US, Nebraska ([40.8680593,-97.5919166](https://www.google.com/maps?q=40.8680593,-97.5919166))
 
 **Named/founded**: 1869
 
@@ -166,7 +166,7 @@ uhhh theres a big [womens prison](https://en.wikipedia.org/wiki/Nebraska_Correct
 
 ---
 
-**14. York** - US, North Dakota ([48.312777,-99.573468](https://www.google.com/maps?q=48.312777,-99.573468))
+**16. York** - US, North Dakota ([48.312777,-99.573468](https://www.google.com/maps?q=48.312777,-99.573468))
 
 **Named/founded**: 1886
 
@@ -210,6 +210,8 @@ here it is:
 );
 out center;
 ```
+
+yeah there's other yorks like yorktown and york charter township and york haven. those aren't close enough.
 
 # In conclusion
 New York, New York should immediately hand over the title to York, Prince Edward Island and change their name to Newish York, Newish York.
