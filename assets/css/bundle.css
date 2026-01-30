@@ -1,3 +1,6 @@
+:root {
+    --accent-colour: #ff1493;
+}
 
 body {
     max-width: 600px;
@@ -17,28 +20,72 @@ nav {
 
 .header>span>a {
     text-decoration: none;
-    color: black;
 }
 
-p, h1, h2, h3, h4, a, span, .jumbo-title {
+table {
+    width: 100%;
+}
+
+p, h1, h2, h3, h4, a, .jumbo-title {
   font-family: "IBM Plex Serif", serif;
   font-optical-sizing: auto;
+}
+
+a {
+    text-decoration: none;
+    color: var(--accent-colour);
+    font-weight: bold;
+}
+
+a[rel~="external"]::after {
+    content: "";
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    margin-left: 0.25em;
+    background-image: url("../svg/external-link.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    vertical-align: text-top;
+}
+
+a:hover {
+    background-color: var(--accent-colour);
+    color: white;
+    box-shadow: 0 0 0 2px var(--accent-colour), 0 0 0 2px var(--accent-colour);
 }
 
 p {
     line-height: 1.5;
 }
 
+blockquote {
+    border-left: 4px solid var(--accent-colour);
+    padding-left: 1rem;
+    margin-left: 0;
+}
+
 .jumbo-title {
-    font-size: 4.0vw;
+    font-size: 3rem;
     font-weight: 700;
     text-align: center;
+    margin-bottom: 3rem;
 }
 
 .jumbo-subtitle {
-    font-size: 2.1vw;
+    font-size: 1.5rem;
     font-weight: 500;
     text-align: center;
+    display: flex;
+}
+
+.jumbo-subtitle-link {
+    flex: 1;
+}
+
+pre { 
+    overflow-x: scroll;
 }
 
 .big-center {
@@ -68,17 +115,53 @@ p {
     text-decoration: none;
 }
 
+.post-title {
+    font-size: 2.5em;
+    font-weight: 700;
+}
+
 .post-subtitle {
     font-size: 16px;
+    font-style: italic;
+    font-family: 'IBM Plex Mono', Consolas, Monaco, monospace;  
+    margin-top: 12px;
+    margin-bottom: 24px;
+}
+
+.date {
+    text-align: right;
+}
+
+article {
+    margin-top: 60px;
+    margin-bottom: 60px;
 }
 
 video {
     display: block;
     margin-left: auto;
     margin-right: auto;
+    max-width: 100%;
 }
 
-.post-title {
-    font-size: 2.5em;
+footer > a {
+    margin: 16px;
+    float: right;
+}
+
+table {
+    border-collapse: collapse;
+    margin: 20px 0px 20px 0px;
+}
+
+th, td {
+    padding: 10px;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+
+th {
     font-weight: 700;
 }

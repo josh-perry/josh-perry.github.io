@@ -1,0 +1,222 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>it is 2026 - january</title>
+
+    <link rel="stylesheet" href="/assets/css/bundle.css">
+    <link rel="stylesheet" href="/assets/css/fonts.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+  </head>
+
+  
+<body>
+<div class="header">
+    <span>
+        <a href="/">hi im josh</a>
+    </span>
+</div>
+<header>
+    <nav>
+    <div><a href="/posts">Posts</a></div>
+    <div><a href="/about">About</a></div>
+    </nav>
+</header>
+
+
+<article>
+  <div class="post-title">it is 2026 - january</div>
+  <div class="post-subtitle">&quot;${year} is going to be my year for sure&quot;</div>
+  <div class="date">30 January 2026</div>
+
+  <p>I'm going to try and keep track of all the Stuff* I do this year. I want to be able to look back from the smouldering ruins of 2027 and think it wasn't all that bad and at least I got some things done.</p>
+<p>*stuff meaning hobby gamedev, tools, fun stuff that I publish to the world.</p>
+<h1>January</h1>
+<h2>Peachy update</h2>
+<p>I'd been neglecting my little <a href="https://github.com/josh-perry/peachy" rel="external">Aseprite LOVE library</a> for a while and I was never quite happy with how it worked.</p>
+<p>I spent a little time this month fixing it up and addressing some issues and quirks:</p>
+<ul>
+<li>Added support for slices
+<ul>
+<li>I use these a lot. They're essentially just rectangles you can draw on the sprite and attach data to.</li>
+<li>They're a bit weird in how they work with animated sprites but the upcoming layer types will hopefully fix a lot of that. I want to support all of these in peachy too.</li>
+</ul>
+</li>
+<li>Added support for hash-type exports
+<ul>
+<li>Previously only supported array-types exports. This was always a pain point. I had a note in the readme about it but nobody reads those.</li>
+<li>Now you can just export either a hash or array style JSON file and peachy handles it.</li>
+</ul>
+</li>
+<li>No more cron dependency
+<ul>
+<li>Genuinely don't know why I had this anyway.</li>
+<li>Easy enough to rip out and incidentally fixes a bug where if your (game's) frame time was higher than a frame's duration then it wouldn't skip properly.</li>
+</ul>
+</li>
+<li>Fixed bugs
+<ul>
+<li>The relative path bug is gone so you can put the peachy folder anywhere without having to change the PATH variable</li>
+<li>Using image dimensions instead of trusting the metadata in the JSON
+<ul>
+<li>this was needed for the spritesheet combiner (see below)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Added LSP annotations</li>
+</ul>
+<h2>Aseprite sheet combiner</h2>
+<p>I had <a href="https://github.com/josh-perry/aseprite-sheet-combiner" rel="external">this code</a> (or code like it) sitting around for a while but I finally cleaned it up and made it usable.</p>
+<p>What does it do? Past me wrote this excellent summary in the readme:</p>
+<blockquote>
+<p>A utility for combining multiple Aseprite files into a single spritesheet with corrected animation frame positions.<br>
+This lets you have loose .aseprite files for your assets but still combine them into one spritesheet (for runtime draw performance via batching).</p>
+</blockquote>
+<p>I can have an artist (or just me :)) work on individual <code>.aseprite</code> files without having to worry about clobbering atlases or merging big (binary) Aseprite files. Everything is nicely contained until it needs to be spritepacked as part of the build process.</p>
+<p>Incidentally a big improvement I want to make to this is properly spritepacking, it relies on Aseprite's packing atm. Might just be able to crop and trim but then slices etc. won't make sense? I think. Will look into.</p>
+<h2>The Newest York</h2>
+<p>I had a realisation that New York might not be the <strong>Newest</strong> York and wrote a bit of code and did a bit of manual research into figuring it out and published it as a <a href="/posts/the-newest-york/">blogpost/largely just rambling mess</a>.</p>
+<p>spoilers: the newest one isn't new york and honestly they should hand over the title.</p>
+<h2>lua-ioc container</h2>
+<p>This is staggeringly unhelpful and goes against everything Lua stands for but I wrote a <a href="https://github.com/josh-perry/lua-ioc" rel="external">little IoC container (library???)</a> in/for it over a lunch break.</p>
+<p>You write code like this:</p>
+<pre><code class="language-lua"><span class="token keyword">local</span> ioc <span class="token operator">=</span> <span class="token function">Container</span><span class="token punctuation">(</span>IoCMode<span class="token punctuation">.</span>DependencyInjection<span class="token punctuation">)</span>
+ioc<span class="token punctuation">:</span><span class="token function">register</span><span class="token punctuation">(</span>LogService<span class="token punctuation">,</span> LogService<span class="token punctuation">,</span> BindingType<span class="token punctuation">.</span>Singleton<span class="token punctuation">)</span>
+ioc<span class="token punctuation">:</span><span class="token function">register</span><span class="token punctuation">(</span>DoSomethingService<span class="token punctuation">,</span> DoSomethingService<span class="token punctuation">,</span> BindingType<span class="token punctuation">.</span>Transient<span class="token punctuation">)</span>
+ioc<span class="token punctuation">:</span><span class="token function">register</span><span class="token punctuation">(</span>ExtraParamService<span class="token punctuation">,</span> ExtraParamService<span class="token punctuation">,</span> BindingType<span class="token punctuation">.</span>Transient<span class="token punctuation">)</span>
+
+<span class="token keyword">local</span> doSomethingService1 <span class="token operator">=</span> ioc<span class="token punctuation">:</span><span class="token function">resolve</span><span class="token punctuation">(</span>DoSomethingService<span class="token punctuation">)</span>
+doSomethingService1<span class="token punctuation">:</span><span class="token function">doSomething</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+doSomethingService1<span class="token punctuation">.</span>logService<span class="token punctuation">:</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"Hello from doSomethingService!"</span><span class="token punctuation">)</span>
+</code></pre>
+<p>and your wildest dependency injected dreams come true. It just works!</p>
+<p>Unfortunately if you look under the hood it's extremely cursed and I don't recommend actually using it.</p>
+<p>You write your constructor functions like this:</p>
+<pre><code class="language-lua"><span class="token comment">---Creates a new DoSomethingService instance.</span>
+<span class="token comment">---@param container Container The IoC container to resolve dependencies from.</span>
+<span class="token keyword">function</span> DoSomethingService<span class="token punctuation">.</span><span class="token function">new</span><span class="token punctuation">(</span>logService<span class="token punctuation">,</span> extraParamService<span class="token punctuation">)</span>
+    <span class="token keyword">local</span> self <span class="token operator">=</span> <span class="token function">setmetatable</span><span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span> DoSomethingService<span class="token punctuation">)</span>
+    self<span class="token punctuation">.</span>logService <span class="token operator">=</span> logService
+    self<span class="token punctuation">.</span>extraParamService <span class="token operator">=</span> extraParamService
+
+    <span class="token keyword">return</span> self
+<span class="token keyword">end</span>
+</code></pre>
+<p>and then the container will resolve the dependencies <em>automagically</em> using Lua's debug library:</p>
+<pre><code class="language-lua"><span class="token comment">---Resolves dependencies for a given implementation.</span>
+<span class="token comment">---@param constructor function The constructor for the implementation to resolve dependencies for.</span>
+<span class="token comment">---@return table ... The resolved dependencies.</span>
+<span class="token keyword">function</span> Container<span class="token punctuation">:</span><span class="token function">resolveDependencies</span><span class="token punctuation">(</span>constructor<span class="token punctuation">)</span>
+    <span class="token keyword">local</span> params <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+    <span class="token keyword">local</span> info <span class="token operator">=</span> debug<span class="token punctuation">.</span><span class="token function">getinfo</span><span class="token punctuation">(</span>constructor<span class="token punctuation">,</span> <span class="token string">"u"</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">for</span> i <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">,</span> info<span class="token punctuation">.</span>nparams <span class="token keyword">do</span>
+        <span class="token keyword">local</span> parameterName <span class="token operator">=</span> debug<span class="token punctuation">.</span><span class="token function">getlocal</span><span class="token punctuation">(</span>constructor<span class="token punctuation">,</span> i<span class="token punctuation">)</span>
+        <span class="token function">assert</span><span class="token punctuation">(</span>parameterName<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token string">"Failed to get parameter name for parameter %d of %s"</span><span class="token punctuation">)</span><span class="token punctuation">:</span><span class="token function">format</span><span class="token punctuation">(</span>i<span class="token punctuation">,</span> <span class="token function">tostring</span><span class="token punctuation">(</span>constructor<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+        <span class="token keyword">local</span> className <span class="token operator">=</span> <span class="token function">transformArgumentNameToClassName</span><span class="token punctuation">(</span>parameterName<span class="token punctuation">)</span>
+        <span class="token keyword">local</span> type <span class="token operator">=</span> self<span class="token punctuation">:</span><span class="token function">getTypeByName</span><span class="token punctuation">(</span>className<span class="token punctuation">)</span>
+
+        table<span class="token punctuation">.</span><span class="token function">insert</span><span class="token punctuation">(</span>params<span class="token punctuation">,</span> self<span class="token punctuation">:</span><span class="token function">resolve</span><span class="token punctuation">(</span>type<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">end</span>
+
+    <span class="token keyword">return</span> <span class="token function">unpack</span><span class="token punctuation">(</span>params<span class="token punctuation">)</span>
+<span class="token keyword">end</span>
+</code></pre>
+<p>for those of you not so moonly inclined this:</p>
+<ul>
+<li>Gets a list of all the parameters in the constructor of the thing we're trying to resolve the dependencies of</li>
+<li>Transforms the <strong>name</strong> of each parameter (so: logService becomes LogService)</li>
+<li>Tries to find that name in the container</li>
+<li>Provides an instance of the dependencies (creating it if necessary i.e. transient or the first time we've seen a particular singleton)</li>
+</ul>
+<p>So this is obviously:</p>
+<ul>
+<li>extremely fragile since the name has to be exactly correct</li>
+<li>slow potentially since it's using the debug library</li>
+<li>will break if you use <code>luac</code> to strip debug info (but who does that?)</li>
+</ul>
+<p>For fun I also added a more sane (perhaps) service locator mode which doesn't use the debug stuff at all:</p>
+<pre><code class="language-lua"><span class="token comment">---Creates a new DoSomethingService instance.</span>
+<span class="token comment">---@param container Container The IoC container to resolve dependencies from.</span>
+<span class="token keyword">function</span> DoSomethingService<span class="token punctuation">.</span><span class="token function">new</span><span class="token punctuation">(</span>container<span class="token punctuation">)</span>
+    <span class="token keyword">local</span> self <span class="token operator">=</span> <span class="token function">setmetatable</span><span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span> DoSomethingService<span class="token punctuation">)</span>
+    self<span class="token punctuation">.</span>logService <span class="token operator">=</span> container<span class="token punctuation">:</span><span class="token function">resolve</span><span class="token punctuation">(</span>LogService<span class="token punctuation">)</span>
+    self<span class="token punctuation">.</span>extraParamService <span class="token operator">=</span> container<span class="token punctuation">:</span><span class="token function">resolve</span><span class="token punctuation">(</span>ExtraParamService<span class="token punctuation">)</span>
+
+    <span class="token keyword">return</span> self
+<span class="token keyword">end</span>
+</code></pre>
+<p>It's essentially the same except the only thing <em>injected</em> is the IoC container itself and the constructors are responsible for fetching their dependencies. Maybe a bit more sane, but on the other hand it turns it into a service locator...</p>
+<h2>ennui</h2>
+<p>I started working on a UI library for LOVE, just like everyone else.</p>
+<video controls>
+    <source src="/assets/video/ennui.mp4" type="video/mp4">
+</video>
+<p>I haven't released this yet but I've posted about it a few times in a LOVE discord.</p>
+<p>It's fairly complete at this point:</p>
+<ul>
+<li>I have a fullish suite of example widgets:
+<ul>
+<li>Button</li>
+<li>Checkbox</li>
+<li>CollapseableHeader</li>
+<li>ComboBox</li>
+<li>DockableWindow</li>
+<li>Dropdown</li>
+<li>DropdownMenu</li>
+<li>Group</li>
+<li>HorizontalStackpanel</li>
+<li>Host (this one is the only special case - its the root of an ennui context)</li>
+<li>Image</li>
+<li>Menu</li>
+<li>RadioButton</li>
+<li>Rectangle</li>
+<li>ScrollArea</li>
+<li>Slider</li>
+<li>StackPanel</li>
+<li>TabBar</li>
+<li>TextButton</li>
+<li>TextInput</li>
+<li>Text</li>
+<li>Treeview</li>
+<li>TreeviewNode</li>
+<li>Window</li>
+</ul>
+</li>
+<li>Reactivity in the form of:
+<ul>
+<li>Watchers</li>
+<li>Computed properties</li>
+</ul>
+</li>
+<li>Draggable widgets</li>
+<li>Dockspaces (though this needs a bit more work, you can't manually split without dropping a widget)</li>
+<li>Tab indexes (widgets can have/be tab contexts)</li>
+<li>A work in progress inspector to examine and debug layouts and computed properties</li>
+<li>Lots of layouting stuff:
+<ul>
+<li>Users can create custom &quot;layout strategies&quot;</li>
+<li>Some obvious ones are included, horizontally and vertically laying out children, grids etc.</li>
+<li>Autosizing, filling space, percentage/ratio sizes, fixed pixel sizes</li>
+</ul>
+</li>
+<li>Probably a lot of other cool stuff.</li>
+</ul>
+<p>The inspector I'm particularly proud of (though it's still early). It works as a completely separate ennui <code>Host</code> so you can toggle it easily and change which <code>Host</code> you're debugging. It can even inspect itself!</p>
+<h2>This site</h2>
+<p>I finally posted something. You're reading it.</p>
+<p>Got some styling on it and everything.</p>
+<h2>til next time</h2>
+<p>anyway thats everything until february when I hopefully release ennui :)</p>
+
+</article>
+
+<footer>
+  <a href="#">Back to top</a>
+</footer>
+</body>
+</html>
