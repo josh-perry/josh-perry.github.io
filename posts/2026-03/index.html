@@ -1,0 +1,86 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>it is 2026 - march</title>
+
+    <link rel="stylesheet" href="/assets/css/bundle.css">
+    <link rel="stylesheet" href="/assets/css/fonts.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+  </head>
+
+  
+<body>
+<div class="header">
+    <span>
+        <a href="/">hi im josh</a>
+    </span>
+</div>
+<header>
+    <nav>
+    <div><a href="/posts">Posts</a></div>
+    <div><a href="/about">About</a></div>
+    </nav>
+</header>
+
+
+<article>
+  <div class="post-title">it is 2026 - march</div>
+  <div class="post-subtitle">uhh</div>
+  <div class="date">11 April 2026</div>
+
+  <h1>March</h1>
+<p>I'm writing this in april so my memory is a bit hazy and this'll be brief probably.</p>
+<p>stuff I did in march:</p>
+<h2>lots of ennui work</h2>
+<p>added a lot of examples, including a really nice example browser:</p>
+<video controls>
+    <source src="/assets/video/march-2026/ennui.mp4" type="video/mp4">
+</video>
+<p>cleaned up a lot of the state api, fixed some nasty bugs. general maintainance on it.</p>
+<h2>lovejam</h2>
+<p><a href="https://itch.io/jam/love2d-jam-2026" rel="external">LOVE Jam 2026</a> was this month and the main thing I did in terms of hobbyist gamedev.</p>
+<p>I had an idea going into it that I could apply to pretty much any theme that came up... except the one that did. The theme was <strong>Counter</strong> and I couldn't convince myself that my idea worked with it but I attempted it did it anyway.</p>
+<h3>idea 1 - archeologist battles?</h3>
+<p>here's the pitch: you are a god placing bones in the ground for archeologists to find. They each imagine a weird and wacky creature and then you pitch those imagined creatures against other imagined creatures. Fun, silly physics based game where you set the pieces and watch them fall.</p>
+<h4>placing bones</h4>
+<p>first up is just getting bones placed in the world and categorising them.</p>
+<video controls>
+    <source src="/assets/video/march-2026/bones_first.mp4" type="video/mp4">
+</video>
+<p>this is pretty tricky as we have to create a MST of the bones and then based on their position and orientation figure out if they're <em>probably</em> an arm or leg, torso or head etc.</p>
+<h4>sticking them together</h4>
+<p>making em into physics objects:</p>
+<p>this is pretty straightforward, we already have the positions of the joints so its just a matter of making box2d physics objects and making revolute joints on each, with reasonableish limits.</p>
+<video controls>
+    <source src="/assets/video/march-2026/bones_first_physics.mp4" type="video/mp4">
+</video>
+<p>making them &quot;walk&quot; is a lot harder.</p>
+<video controls>
+    <source src="/assets/video/march-2026/bones_walking.mp4" type="video/mp4">
+</video>
+<h4>the point I gave up</h4>
+<video controls>
+    <source src="/assets/video/march-2026/bones_final.mp4" type="video/mp4">
+</video>
+<p>got some bone graphics in, added some variation on the different archologist interpretations.</p>
+<p>had a whole (functioning!) double elimination bracket with rounds won by pushing the opponent out of the arena and... ran out of time.</p>
+<h3>idea 2 we're doing eggs now</h3>
+<p>I realised I wasn't even close to getting this done and while I was tinkering with metaballs to make some weird skin for the skeletons I had the idea to just make a game about eggs. on a countertop, get it? fits the theme better and everything.</p>
+<p>anyway I bashed this out in what must have been 4-5 hours and its a ton more polished than the bones game that I love so much.</p>
+<video controls>
+    <source src="/assets/video/march-2026/eggs_final.mp4" type="video/mp4">
+</video>
+<p>its like a bad cooking mama but with really nice egg physics.</p>
+<h2>minor love cookbook maintenance</h2>
+<p>this one is a stretch but I merged some other peoples work on the <a href="https://github.com/Diminiminim/love-cookbook" rel="external">love-cookbook</a>. I wrote a few pages in various states of completeness myself this month but I haven't gotten them over the line yet. :(</p>
+
+</article>
+
+<footer>
+  <a href="#">Back to top</a>
+</footer>
+</body>
+</html>
